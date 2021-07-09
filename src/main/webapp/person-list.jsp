@@ -26,7 +26,7 @@
         <hr>
         <div class="container text-left">
 
-            <a href="<%=request.getContextPath()%>/new" class="btn btn-success">Добавить
+            <a href="<%=request.getContextPath()%>/ServletJndi/new" class="btn btn-success">Добавить
                 нового человека</a>
         </div>
         <br>

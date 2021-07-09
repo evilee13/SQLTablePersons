@@ -20,9 +20,9 @@ async function createTable() {
         let link = document.createElement('a');
         let link2 = document.createElement('a');
         link2.innerHTML = "Edit";
-        link2.href=`./edit?id=${person.id}`
+        link2.href=`./ServletJndi/edit?id=${person.id}`
         link.innerHTML = "Delete";
-        link.href=`./delete?id=${person.id}`
+        link.href=`./ServletJndi/delete?id=${person.id}`
         td3.appendChild(link2);
         td3.appendChild(link);
         tbody.appendChild(td2);

@@ -35,33 +35,33 @@ public class ServletJndi extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getServletPath();
+        String action = request.getPathInfo();
         switch (action) {
-            case "/new":
+            case "ServletJndi/new":
                 showNewForm(request, response);
                 break;
-            case "/insert":
+            case "ServletJndi/insert":
                 try {
                     insertPerson(request, response);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
                 break;
-            case "/update":
+            case "ServletJndi/update":
                 try {
                     updatePerson(request,response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case "/edit":
+            case "ServletJndi/edit":
                 try {
                     showEditForm(request, response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case "/delete":
+            case "ServletJndi/delete":
                 try {
                     deletePerson(request, response);
                 } catch (Exception e) {
@@ -87,19 +87,20 @@ public class ServletJndi extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         printWriter.write(personJSON);
         printWriter.close();
-        RequestDispatcher dispatcher = request.getRequestDispatcher("person-list.jsp");
+        request.setAttribute("personList", personList);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/person-list.jsp");
         dispatcher.forward(request,response);
     }
 
     public void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("person-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/person-form.jsp");
         dispatcher.forward(request, response);
     }
 
     public void showEditForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
         Person existPerson = personsDao.selectPersonById(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("person-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/person-form.jsp");
         request.setAttribute("person",existPerson);
         dispatcher.forward(request, response);
     }
@@ -110,7 +111,7 @@ public class ServletJndi extends HttpServlet {
         if (request.getParameter("id") == null) {
             Person newPerson = new Person(first_name, last_name);
             personsDao.insertPerson(newPerson);
-            response.sendRedirect("person-list.jsp");
+            response.sendRedirect("/person-list.jsp");
         }
     }
     private void updatePerson(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -120,13 +121,13 @@ public class ServletJndi extends HttpServlet {
             String last_name = request.getParameter("lastName");
             Person person = new Person(id, first_name, last_name);
             personsDao.updatePerson(person);
-            response.sendRedirect("person-list.jsp");
+            response.sendRedirect("/person-list.jsp");
         }
     }
 
     private void deletePerson(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
         personsDao.deletePerson(id);
-        response.sendRedirect("person-list.jsp");
+        response.sendRedirect("/person-list.jsp");
     }
 }
