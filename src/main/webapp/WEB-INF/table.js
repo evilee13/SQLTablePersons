@@ -1,7 +1,7 @@
 "use strict";
 
 async function createTable() {
-    let url = "ServletJndi"
+    let url = "/ServletJndi/list"
     let response = await fetch(url);
     let result = await response.json()
     let personArray = result;
@@ -30,4 +30,10 @@ async function createTable() {
         tbody.appendChild(tr);
     }
 }
+let btn = document.querySelector("button");
+btn.addEventListener("click",()=>{
+    document.location.href=`./person-list.jsp`
+})
+
+
 createTable()

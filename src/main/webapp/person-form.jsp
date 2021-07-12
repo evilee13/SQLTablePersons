@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.bft.com.Person" %><%--
   Created by IntelliJ IDEA.
   User: Swainy
   Date: 07.07.2021
@@ -23,24 +23,29 @@
     </nav>
 </header>
 <br>
-<form action="insert" method="POST">
-    <form action="update" method="POST">
+<form action="action="<%= request.getAttribute("edit")== null?"insert":"update" %>"" method="POST">
+    <% Person person = (Person)request.getAttribute("person"); %>
     <div class="form-row align-items-center">
+        <input type="hidden" name="id" value="<%= person != null? person.getId():""%>">
         <div class="col-sm-3 my-1">
             <label class="sr-only" for="inlineFormInputName">firstName</label>
-            <input type="text" class="form-control" id="inlineFormInputName" placeholder="Имя">
+            <input type="text" name="firstName" value="<%= person != null? person.getFirstName():""%>"
+                   class="form-control" id="inlineFormInputName" placeholder="Имя">
         </div>
         <div class="col-sm-3 my-1">
             <label class="sr-only" for="inlineFormInputGroupUsername">lastName</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Фамилия">
+                <input type="text" name="lastName" value="<%= person != null? person.getLastName():""%>"
+                       class="form-control" id="inlineFormInputGroupUsername" placeholder="Фамилия">
             </div>
         </div>
         <div class="col-auto my-1">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <button type="button" class="btn btn-primary">Сохранить</button>
         </div>
     </div>
-    </form>
 </form>
+<script type="text/javascript">
+    <%@include file="/WEB-INF/table.js"%>
+</script>
 </body>
 </html>
