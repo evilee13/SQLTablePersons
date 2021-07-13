@@ -47,13 +47,6 @@ public class ServletJndi extends HttpServlet {
                     e.printStackTrace();
                 }
                 break;
-            case "/delete":
-                try {
-                    deletePerson(request, response);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
         }
     }
 
@@ -66,6 +59,13 @@ public class ServletJndi extends HttpServlet {
             case "/edit":
                 try {
                     showEditForm(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "/delete":
+                try {
+                    deletePerson(request, response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,11 +108,11 @@ public class ServletJndi extends HttpServlet {
     private void insertPerson (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         String first_name = request.getParameter("firstName");
         String last_name = request.getParameter("lastName");
-        if (request.getParameter("id") == null) {
+        if (request.getParameter("id") == null||request.getParameter("id").isEmpty()) {
             Person newPerson = new Person(first_name, last_name);
             personsDao.insertPerson(newPerson);
-            response.sendRedirect(request.getContextPath()+"/person-list.jsp");
         }
+        response.sendRedirect(request.getContextPath()+"/person-list.jsp");
     }
     private void updatePerson (HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (request.getParameter("id") != null) {
@@ -121,13 +121,15 @@ public class ServletJndi extends HttpServlet {
             String last_name = request.getParameter("lastName");
             Person person = new Person(id, first_name, last_name);
             personsDao.updatePerson(person);
-            response.sendRedirect(request.getContextPath()+"/person-list.jsp");
         }
+        response.sendRedirect(request.getContextPath()+"/person-list.jsp");
     }
 
     private void deletePerson (HttpServletRequest request, HttpServletResponse response) throws Exception {
-        int id = Integer.parseInt(request.getParameter("id"));
-        personsDao.deletePerson(id);
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            personsDao.deletePerson(id);
+        }
         response.sendRedirect(request.getContextPath()+"/person-list.jsp");
     }
 }

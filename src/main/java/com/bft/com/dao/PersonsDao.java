@@ -12,11 +12,11 @@ import java.util.List;
 
 
 public class PersonsDao {
-    private static final String INSERT_PERSONS_SQL = "INSERT INTO persons  (id,first_name,last_name) VALUES  (?, ?, ?);";
-    private static final String SELECT_ALL_PERSONS = "SELECT * FROM persons";
+    private static final String INSERT_PERSONS_SQL = "INSERT INTO persons" + "(first_name,last_name) VALUES " + " ( ?, ?);";
+    private static final String SELECT_ALL_PERSONS = "SELECT id,first_name,last_name FROM persons ORDER BY id asc";
     private static final String SELECT_PERSON_BY_ID = "SELECT id,first_name,last_name FROM persons WHERE id = ?;";
     private static final String DELETE_PERSONS_SQL = "DELETE FROM persons WHERE id = ?;";
-    private static final String UPDATE_PERSONS_SQL = "UPDATE persons SET first_name = ?,last_name= ?, WHERE id = ?;";
+    private static final String UPDATE_PERSONS_SQL = "UPDATE persons SET first_name = ?,last_name= ? WHERE id = ?;";
 
 
     public PersonsDao() {
@@ -44,6 +44,7 @@ public class PersonsDao {
         PreparedStatement preparedStatement = null;
         try {
             conn = getJndiConnection();
+            conn.setAutoCommit(false);
             preparedStatement = conn.prepareStatement(INSERT_PERSONS_SQL);
             preparedStatement.setString(1, person.getFirstName());
             preparedStatement.setString(2, person.getLastName());
@@ -53,10 +54,10 @@ public class PersonsDao {
             assert conn != null;
             conn.rollback();
         } finally {
-            if (preparedStatement!=null){
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
-            if (conn !=null){
+            if (conn != null) {
                 conn.close();
             }
         }
@@ -68,20 +69,21 @@ public class PersonsDao {
         PreparedStatement statement = null;
         try {
             conn = getJndiConnection();
+            conn.setAutoCommit(false);
             statement = conn.prepareStatement(UPDATE_PERSONS_SQL);
             statement.setString(1, person.getFirstName());
             statement.setString(2, person.getLastName());
             statement.setInt(3, person.getId());
             rowUpdated = statement.executeUpdate() > 0;
             conn.commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             assert conn != null;
             conn.rollback();
         } finally {
-            if (statement!=null){
+            if (statement != null) {
                 statement.close();
             }
-            if (conn !=null){
+            if (conn != null) {
                 conn.close();
             }
         }
@@ -94,18 +96,19 @@ public class PersonsDao {
         PreparedStatement statement = null;
         try {
             conn = getJndiConnection();
+            conn.setAutoCommit(false);
             statement = conn.prepareStatement(DELETE_PERSONS_SQL);
-            statement.setInt(3,id);
+            statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
             conn.commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             assert conn != null;
             conn.rollback();
         } finally {
-            if (statement!=null){
+            if (statement != null) {
                 statement.close();
             }
-            if (conn !=null){
+            if (conn != null) {
                 conn.close();
             }
         }
@@ -137,10 +140,11 @@ public class PersonsDao {
             ResultSet result = preparedStatement.executeQuery();
 
             while (result.next()) {
+                int numberId = result.getInt("id");
+                String firstName = result.getString("first_name");
+                String lastName = result.getString("last_name");
+                person = new Person(numberId,firstName, lastName);
             }
-            String firstName = result.getString("first_name");
-            String lastName = result.getString("last_name");
-            person = new Person(firstName, lastName);
         } catch (SQLException e) {
             e.printStackTrace();
         }

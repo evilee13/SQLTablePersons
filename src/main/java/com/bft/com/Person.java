@@ -17,7 +17,9 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public Person(String first_name, String last_name) {
+    public Person(String firstName, String lastName) {
+        this.firstName=firstName;
+        this.lastName=lastName;
     }
 
     public int getId() {

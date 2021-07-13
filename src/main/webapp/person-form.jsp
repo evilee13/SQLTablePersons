@@ -23,8 +23,8 @@
     </nav>
 </header>
 <br>
-<form action="action="<%= request.getAttribute("edit")== null?"insert":"update" %>"" method="POST">
-    <% Person person = (Person)request.getAttribute("person"); %>
+<%Person person = (Person)request.getAttribute("person"); %>
+<form action="<%= person== null?"insert":"update" %>" method="POST">
     <div class="form-row align-items-center">
         <input type="hidden" name="id" value="<%= person != null? person.getId():""%>">
         <div class="col-sm-3 my-1">
@@ -40,8 +40,7 @@
             </div>
         </div>
         <div class="col-auto my-1">
-            <input type="button" value="Сохранить" onclick= "location.href =`/SQLTable_war/person-list.jsp`"
-                   class="btn btn-primary">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
     </div>
 </form>

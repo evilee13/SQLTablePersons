@@ -30,3 +30,5 @@ async function createTable() {
         tbody.appendChild(tr);
     }
 }
+
+createTable();
