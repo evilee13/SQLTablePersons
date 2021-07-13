@@ -40,7 +40,8 @@
             </div>
         </div>
         <div class="col-auto my-1">
-            <button type="button" class="btn btn-primary">Сохранить</button>
+            <input type="button" value="Сохранить" onclick= "location.href =`/SQLTable_war/person-list.jsp`"
+                   class="btn btn-primary">
         </div>
     </div>
 </form>

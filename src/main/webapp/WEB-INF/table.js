@@ -1,7 +1,7 @@
 "use strict";
 
 async function createTable() {
-    let url = "/ServletJndi/list"
+    let url = "/SQLTable_war/ServletJndi/list"
     let response = await fetch(url);
     let result = await response.json()
     let personArray = result;
@@ -19,9 +19,9 @@ async function createTable() {
         let td3=document.createElement('td');
         let link = document.createElement('a');
         let link2 = document.createElement('a');
-        link2.innerHTML = "Edit";
+        link2.innerHTML = "edit";
         link2.href=`./ServletJndi/edit?id=${person.id}`
-        link.innerHTML = "Delete";
+        link.innerHTML = "delete";
         link.href=`./ServletJndi/delete?id=${person.id}`
         td3.appendChild(link2);
         td3.appendChild(link);
@@ -30,10 +30,3 @@ async function createTable() {
         tbody.appendChild(tr);
     }
 }
-let btn = document.querySelector("button");
-btn.addEventListener("click",()=>{
-    document.location.href=`./person-list.jsp`
-})
-
-
-createTable()

@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-md navbar-dark"
          style="background-color: tomato">
         <ul class="navbar-nav">
-            <li><a id="linkList" href="<%=request.getContextPath()%>/ServletJndi/list"
+            <li><a id="linkList" onclick="createTable()"
                    class="nav-link">Persons</a></li>
         </ul>
     </nav>

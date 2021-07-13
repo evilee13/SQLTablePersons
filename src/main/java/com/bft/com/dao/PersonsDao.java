@@ -18,6 +18,7 @@ public class PersonsDao {
     private static final String DELETE_PERSONS_SQL = "DELETE FROM persons WHERE id = ?;";
     private static final String UPDATE_PERSONS_SQL = "UPDATE persons SET first_name = ?,last_name= ?, WHERE id = ?;";
 
+
     public PersonsDao() {
     }
 
@@ -39,36 +40,74 @@ public class PersonsDao {
     }
 
     public void insertPerson(Person person) throws SQLException {
-
-        try (Connection conn = getJndiConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_PERSONS_SQL)) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            conn = getJndiConnection();
+            preparedStatement = conn.prepareStatement(INSERT_PERSONS_SQL);
             preparedStatement.setString(1, person.getFirstName());
             preparedStatement.setString(2, person.getLastName());
             preparedStatement.executeUpdate();
+            conn.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            assert conn != null;
+            conn.rollback();
+        } finally {
+            if (preparedStatement!=null){
+                preparedStatement.close();
+            }
+            if (conn !=null){
+                conn.close();
+            }
         }
     }
 
     public boolean updatePerson(Person person) throws Exception {
-        boolean rowUpdated;
-        try (Connection conn = getJndiConnection();
-             PreparedStatement statement = conn.prepareStatement(UPDATE_PERSONS_SQL)) {
+        boolean rowUpdated = false;
+        Connection conn = null;
+        PreparedStatement statement = null;
+        try {
+            conn = getJndiConnection();
+            statement = conn.prepareStatement(UPDATE_PERSONS_SQL);
             statement.setString(1, person.getFirstName());
             statement.setString(2, person.getLastName());
             statement.setInt(3, person.getId());
-
             rowUpdated = statement.executeUpdate() > 0;
+            conn.commit();
+        } catch (Exception e){
+            assert conn != null;
+            conn.rollback();
+        } finally {
+            if (statement!=null){
+                statement.close();
+            }
+            if (conn !=null){
+                conn.close();
+            }
         }
         return rowUpdated;
     }
 
     public boolean deletePerson(int id) throws Exception {
-        boolean rowDeleted;
-        try (Connection conn = getJndiConnection();
-             PreparedStatement statement = conn.prepareStatement(DELETE_PERSONS_SQL)) {
-            statement.setInt(3, id);
+        boolean rowDeleted = false;
+        Connection conn = null;
+        PreparedStatement statement = null;
+        try {
+            conn = getJndiConnection();
+            statement = conn.prepareStatement(DELETE_PERSONS_SQL);
+            statement.setInt(3,id);
             rowDeleted = statement.executeUpdate() > 0;
+            conn.commit();
+        } catch (Exception e){
+            assert conn != null;
+            conn.rollback();
+        } finally {
+            if (statement!=null){
+                statement.close();
+            }
+            if (conn !=null){
+                conn.close();
+            }
         }
         return rowDeleted;
     }

@@ -89,9 +89,6 @@ public class ServletJndi extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         printWriter.write(personJSON);
         printWriter.close();
-//        request.setAttribute("personList", personList);
-//        RequestDispatcher dispatcher = request.getRequestDispatcher("/person-list.jsp");
-//        dispatcher.forward(request,response);
     }
 
     public void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -104,6 +101,7 @@ public class ServletJndi extends HttpServlet {
         Person existPerson = personsDao.selectPersonById(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/person-form.jsp");
         request.setAttribute("person", existPerson);
+        request.setAttribute("edit",true);
         dispatcher.forward(request, response);
     }
 
