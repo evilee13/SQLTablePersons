@@ -30,7 +30,7 @@
                 нового человека</a>
         </div>
         <br>
-        <table class="table">
+        <table id="table" class="table">
             <thead class="thead-light">
             <tr>
                 <th scope="col">id</th>
